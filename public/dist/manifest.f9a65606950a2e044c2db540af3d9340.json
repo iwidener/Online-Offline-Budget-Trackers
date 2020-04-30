@@ -1,0 +1,23 @@
+{
+  "icons": [
+    {
+      "src": "public/icons/icon_512x512.273935f8ebdc8218f2ce26daa11d6844.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "public/icons/icon_192x192.317079d2f38bc5d2906f5408114bbcd3.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "Online/Offline Budget Trackers",
+  "short_name": "Budget Trackers",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "/",
+  "description": "An application that allows the user to add expenses and deposits to a budget without a connection.",
+  "background_color": "#01579b",
+  "theme_color": "#ffffff",
+  "theme-color": "#ffffff"
+}
