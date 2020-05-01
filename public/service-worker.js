@@ -1,8 +1,8 @@
 const FILES_TO_CACHE = [
     "/",
-    "./index.html",
-    "./index.js",
-    "./style.css",
+    "/index.html",
+    "/index.js",
+    "/style.css",
     "/dist/app.bundle.js",
     "/dist/manifest.f9a65606950a2e044c2db540af3d9340.json"
   ];
@@ -19,7 +19,6 @@ const FILES_TO_CACHE = [
     );
   });
   
-  // The activate handler takes care of cleaning up old caches.
   self.addEventListener("activate", event => {
     const currentCaches = [PRECACHE, RUNTIME];
     event.waitUntil(
