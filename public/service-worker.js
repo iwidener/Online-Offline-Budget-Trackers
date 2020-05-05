@@ -1,9 +1,12 @@
 const FILES_TO_CACHE = [
     "/",
     "/index.html",
+    "/indexedDB.js",
     "/index.js",
-    "/style.css",
-    "/dist/app.bundle.js",
+    "/styles.css",
+    "/icons/icon_192x192.317079d2f38bc5d2906f5408114bbcd3.png",
+    "/icons/icon_512x512.273935f8ebdc8218f2ce26daa11d6844.png",
+    // "/dist/app.bundle.js",
     "/dist/manifest.f9a65606950a2e044c2db540af3d9340.json"
   ];
   
@@ -16,6 +19,7 @@ const FILES_TO_CACHE = [
       caches.open(PRECACHE)
         .then(cache => cache.addAll(FILES_TO_CACHE))
         .then(self.skipWaiting())
+        .catch( (err) => console.log(err))
     );
   });
   
