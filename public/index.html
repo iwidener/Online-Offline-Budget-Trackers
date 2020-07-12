@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="./dist/manifest.f9a65606950a2e044c2db540af3d9340.json">
-
+ 
   <title>Budget Tracker</title>
 </head>
 
@@ -46,20 +46,34 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script src="indexedDB.js"></script>
- 
   <script src="index.js"></script>
 
-  <script type="text/javascript">
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").then(reg => {
+          console.log("We found your service worker file!", reg);
+        });
+      });
+    }
+  </script>
 
+  <!-- <script type="text/javascript">
+    /*Register the service worker if ("serviceWorker in navigator")*/
     (function () {
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./service-worker.js", { scope: "/" })
-          .then(() => console.log("Service Worker registered successfully."))
-          .catch(error => console.log("Service Worker registration failed:", error));
+        navigator.serviceWorker.register("./service-worker.js", {scope:"/"})
+          .then(function (registration) {
+            console.log("Service Worker registered successfully.", registration.scope)
+          }
+            .catch(function (error) {
+              console.log("Service Worker registration failed:", error);
+            })
+          )
       }
-    })();
+    });
 
-  </script>
+  </script> -->
 </body>
 
 </html>

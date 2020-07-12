@@ -1,5 +1,6 @@
 const FILES_TO_CACHE = [
   "/",
+  "/index.html",
   "/indexedDB.js",
   "/index.js",
   "/styles.css",
@@ -11,38 +12,91 @@ const FILES_TO_CACHE = [
 const PRECACHE = "precache-v1";
 const RUNTIME = "runtime";
 
+// Install
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(PRECACHE)
-      .then(cache => cache.addAll(FILES_TO_CACHE))
-      .then(self.skipWaiting())
-      .catch((err) => console.log(err))
+    caches.open(PRECACHE).then(cache => {
+      console.log("Your files were pre-cached successully!");
+      return cache.addAll(FILES_TO_CACHE)
+      // .then(self.skipWaiting())
+      // .catch((err) => console.log(err))
+    })
   );
+  self.skipWaiting();
 });
+
+// Activate
+// self.addEventListener("activate", event => {
+//   const currentCaches = [PRECACHE, RUNTIME];
+//   event.waitUntil(
+//     caches.keys().then(cacheNames => {
+//       return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+//     }).then(cachesToDelete => {
+//       return Promise.all(cachesToDelete.map(cacheToDelete => {
+//         return caches.delete(cacheToDelete);
+//       }));
+//     }).then(() => self.clients.claim())
+//   );
+// });
 
 self.addEventListener("activate", event => {
-  const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-    }).then(cachesToDelete => {
-      return Promise.all(cachesToDelete.map(cacheToDelete => {
-        return caches.delete(cacheToDelete);
-      }));
-    }).then(() => self.clients.claim())
+    caches.keys().then(keyList => {
+      return Promise.all(
+        keyList.map(key => {
+          if (key !== PRECACHE && key !== RUNTIME) {
+            console.log("Removing old cache data", key);
+            return caches.delete(key);
+          }
+        })
+      );
+    })
   );
+  self.clients.claim();
 });
 
+// Fetch
+// self.addEventListener("fetch", event => {
+//   if (event.request.method !== "GET" || !event.request.url.includes("/api/")) {
+//     event.respondWith(
+//       caches.open(RUNTIME).then(cache => {
+//         return fetch(event.request).then(response => {
+//           return cache.put(event.request, response.clone())
+//             .then(() => {
+//               return response;
+//             });
+//         }
+//         );
+//       })
+//     );
+//   }
+// });
+
 self.addEventListener("fetch", event => {
-  if (event.request.url.includes("/api/")) {
+  if (event.request.method !== "GET" || event.request.url.includes("/api/")) {
     event.respondWith(
       caches.open(RUNTIME).then(cache => {
-        return fetch(event.request).then(response => {
-          return cache.put(event.request, response.clone()).then(() => {
+        return fetch(event.request)
+          .then(response => {
+            // If the response was good, clone it and store it in the cache.
+            if (response.status === 200) {
+              cache.put(evt.request.url, response.clone());
+            }
             return response;
+          })
+          .catch(err => {
+            // Network request failed, try to get it from the cache.
+            return cache.match(event.request);
           });
-        });
-      })
+      }).catch(err => console.log(err))
     );
+    return;
   }
+  event.respondWith(
+    caches.open(PRECACHE).then(cache => {
+      return cache.match(event.request).then(response => {
+        return response || fetch(eventt.request);
+      });
+    })
+  );
 });
