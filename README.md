@@ -21,5 +21,8 @@
 ### Online Functionality
 * Offline entries should be added to a tracker. 
 
+## Demo
+![Alt Text](https://media.giphy.com/media/VeC97W9YK4Cpjr54uX/giphy.gif)
+
 ## Deployment
 https://budget-tracker-star.herokuapp.com/
